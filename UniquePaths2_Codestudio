@@ -1,0 +1,32 @@
+#include <bits/stdc++.h> 
+#define mod 1000000007
+int solve(int col, int row,int m,int n,vector<vector<int>> &dp,vector< vector< int> > &mat)
+{
+	if(row==m-1 && col==n-1) return 1;
+
+	if(dp[row][col]!=-1) return dp[row][col];
+
+
+	int right=0;
+	int down=0;
+
+	if(col+1<n && mat[row][col+1]!=-1)
+	{
+		right=solve(col+1,row,m,n,dp,mat);
+	}
+
+	if(row+1<m && mat[row+1][col]!=-1)
+	{
+		down=solve(col,row+1,m,n,dp,mat);
+	}
+
+	return dp[row][col]=(down+right)%mod;
+}
+
+int mazeObstacles(int m, int n, vector< vector< int> > &mat) {
+    // Write your code here
+
+    vector<vector<int>> dp(m,vector<int>(n,-1));
+
+	return solve(0,0,m,n,dp,mat);
+}
