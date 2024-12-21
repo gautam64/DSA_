@@ -1,0 +1,124 @@
+//{ Driver Code Starts
+#include <bits/stdc++.h>
+using namespace std;
+
+
+// } Driver Code Ends
+// User function template for C++
+
+class Solution {
+    private:
+    void solve (int row,int col,vector<vector<int>> &vis,string temp,vector<string> &ans,vector<vector<int>> &mat)
+    {
+        if(row==mat.size()-1 && col==mat.size()-1)
+        {
+            ans.push_back(temp);
+            return;
+        }
+        
+        
+        //down
+        
+        if(row+1<mat.size() && !vis[row+1][col] && mat[row+1][col]==1)
+        {
+            vis[row][col]=1;
+            solve(row+1,col,vis,temp+'D',ans,mat);
+            vis[row][col]=0;
+        }
+        
+        if(col-1>=0 && !vis[row][col-1] && mat[row][col-1]==1)
+        {
+            vis[row][col]=1;
+            solve(row,col-1,vis,temp+'L',ans,mat);
+            vis[row][col]=0;
+        }
+        
+        if(col+1< mat.size() && !vis[row][col+1] && mat[row][col+1]==1)
+        {
+            vis[row][col]=1;
+            solve(row,col+1,vis,temp+'R',ans,mat);
+            vis[row][col]=0;
+        }
+        
+        if(row-1>=0 && !vis[row-1][col] && mat[row-1][col]==1)
+        {
+            vis[row][col]=1;
+            solve(row-1,col,vis,temp+'U',ans,mat);
+            vis[row][col]=0;
+        }
+        
+        
+    }
+  public:
+    vector<string> findPath(vector<vector<int>> &mat) {
+        // code here
+        
+        vector<string> ans;
+        vector<vector<int>> vis(mat.size(),vector<int>(mat.size(),0));
+        
+        if (mat[0][0] == 1) solve(0,0,vis,"",ans,mat);
+        return ans;
+    }
+};
+
+
+//{ Driver Code Starts.
+
+int main() {
+    int t;
+    cin >> t;
+    cin.ignore();
+    while (t--) {
+        string input;
+        getline(cin, input);
+        vector<vector<int>> mat;
+        string innerArray;
+        bool isInsideArray = false;
+
+        for (char c : input) {
+            if (c == '[') {
+                if (isInsideArray) {
+                    innerArray.clear();
+                }
+                isInsideArray = true;
+            } else if (c == ']') {
+                if (isInsideArray && !innerArray.empty()) {
+                    vector<int> row;
+                    stringstream ss(innerArray);
+                    int num;
+
+                    while (ss >> num) {
+                        row.push_back(num);
+                        if (ss.peek() == ',')
+                            ss.ignore();
+                        while (isspace(ss.peek()))
+                            ss.ignore();
+                    }
+
+                    mat.push_back(row);
+                    innerArray.clear();
+                }
+                isInsideArray = false;
+            } else if (isInsideArray) {
+                if (!isspace(c)) {
+                    innerArray += c;
+                }
+            }
+        }
+
+        Solution obj;
+        vector<string> result = obj.findPath(mat);
+        sort(result.begin(), result.end());
+
+        if (result.empty())
+            cout << "[]";
+        else
+            for (int i = 0; i < result.size(); i++)
+                cout << result[i] << " ";
+        cout << endl;
+        cout << "~" << endl;
+    }
+    return 0;
+}
+
+// } Driver Code Ends
