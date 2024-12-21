@@ -1,0 +1,44 @@
+int solve(int day,int task,vector<vector<int>> &points,vector<vector<int>> &dp)
+{
+    if(day==0)
+    {
+        int maxi=0;
+
+        for(int i=0;i<3;i++)
+        {
+            if(task!=i)
+            {
+                maxi=max(maxi,points[day][i]);
+            }
+        }
+
+        return maxi;
+    }
+
+    if(dp[day][task]!=0) return dp[day][task];
+
+    int maxi=0;
+    for(int i=0;i<3;i++)
+        {
+            if(task!=i)
+            {
+                int ans=points[day][i]+solve(day-1,i,points,dp);
+                maxi=max(maxi,ans);
+            }
+        }
+
+    return dp[day][task]=maxi;
+
+
+}
+
+int ninjaTraining(int n, vector<vector<int>> &points)
+{
+    // Write your code here.
+
+    vector<vector<int>> dp(points.size(),vector<int>(4,0));
+
+    return solve(n-1,3,points,dp);
+
+
+}
