@@ -1,0 +1,48 @@
+#include <bits/stdc++.h> 
+bool solve(int index,int target,vector<int>& arr,vector<vector<int>> &dp)
+{
+	if(target==0) return dp[index][target]=true;
+	if(index==0) return (dp[index][target]=arr[0]==target);
+
+    if(dp[index][target]!=-1) return dp[index][target];
+	//exclude
+	bool ans1=solve(index-1,target,arr,dp);
+	//include
+    bool ans2=false;
+	if(arr[index]<=target)
+      ans2=solve(index-1,target-arr[index],arr,dp);
+
+
+	return dp[index][target]=ans1||ans2;
+
+}
+
+int minSubsetSumDifference(vector<int>& arr, int n)
+{
+	
+    int sum=0;
+	for(int i=0;i<n;i++)
+	{
+		sum+=arr[i];
+	}
+    vector<vector<int>> dp(n,vector<int>(sum+1,-1));
+	
+	for(int i=0;i<=sum;i++)
+	{
+		solve(n-1,i,arr,dp);
+	}
+	
+	int mindiff=INT_MAX;
+	int target=sum;
+
+    for(int i=0;i<=target;i++)
+	{  	
+
+	   if(dp[n-1][i]==1)
+	   {
+		   mindiff=min(mindiff,abs(sum-2*i));
+	   }
+	}
+
+    return mindiff;
+}
