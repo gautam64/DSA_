@@ -1,0 +1,67 @@
+#include <bits/stdc++.h> 
+int solve(int ind,int tar,vector<int> &num,vector<vector<int>> &dp)
+{
+
+    if(tar==0) return 0;
+    if(ind==0)
+    {
+        if(tar%num[ind]==0) return tar/num[ind];
+        else return 1e9;
+    }
+
+    if(dp[ind][tar]!=-1) return dp[ind][tar];
+
+    int notpick=solve(ind-1,tar,num,dp);
+    int pick=1e8;
+    if(num[ind]<=tar)
+    {
+        for(int i=0;i<tar/num[ind];i++)
+        {
+            pick=min(pick,i+1+solve(ind-1,tar-(i+1)*num[ind],num,dp));
+        }
+    }
+
+    return dp[ind][tar]=min(pick,notpick);
+}
+int minimumElements(vector<int> &num, int x)
+{
+    // Write your code here.
+    
+    int n=num.size();
+    vector<vector<int>>dp(n,vector<int>(x+1,-1));
+
+    for(int i=0;i<n;i++) dp[i][0]=0;
+
+    for(int tar=0;tar<=x;tar++)
+    {
+        if(tar%num[0]==0) dp[0][tar]= tar/num[0];
+        else dp[0][tar]= 1e9;
+    }
+
+
+    for(int ind=1;ind<n;ind++)
+    {
+        for(int tar=1;tar<=x;tar++)
+        {
+                int notpick=dp[ind-1][tar];
+                int pick=1e9;
+                if(num[ind]<=tar)
+                {
+                    for(int i=0;i<tar/num[ind];i++)
+                    {
+                        pick=min(pick,i+1+dp[ind-1][tar-(i+1)*num[ind]]);
+                    }
+                } 
+
+                dp[ind][tar]=min(pick,notpick);
+        }
+    }
+
+    int ans= dp[n-1][x];
+
+    if(ans>1e7)
+    {
+        return -1;
+    }
+    else return ans;
+}
