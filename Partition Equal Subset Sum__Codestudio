@@ -1,0 +1,30 @@
+bool solve(int ind,int tar,vector<int> &arr,vector<vector<int>> &dp)
+{
+  if(tar==0) return true;
+  if(ind==0) return (arr[ind]==tar);
+
+  if(dp[ind][tar]!=-1) return dp[ind][tar];
+
+  bool notpick=solve(ind-1,tar,arr,dp);
+  bool pick=false;
+  if(tar>=arr[ind]) pick=solve(ind-1,tar-arr[ind],arr,dp);
+
+  return dp[ind][tar]=pick || notpick;
+}
+
+bool canPartition(vector<int> &arr, int n)
+{
+	// Write your code here.
+  int sum=0;
+
+  for(int i=0;i<n;i++)
+  {
+    sum=sum+arr[i];
+  }
+
+  if(sum%2!=0) return false;
+
+  vector<vector<int>> dp(n,vector<int>((sum/2) +1,-1));
+
+  return solve(n-1,sum/2,arr,dp);
+}
