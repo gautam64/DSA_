@@ -1,0 +1,40 @@
+#include <bits/stdc++.h> 
+int solve(int ind,int tar,vector<int>& arr,vector<vector<int>> &dp)
+{
+    if(ind==0)
+    {
+
+        if(tar==0 && arr[0]==0) return 2;
+        if(tar==arr[0] || tar==0) return 1;
+
+
+        return 0;
+    }
+
+    if(dp[ind][tar]!=-1) return dp[ind][tar];
+
+    int notpick=solve(ind-1,tar,arr,dp);
+
+    int pick=0;
+    if(tar>=arr[ind]) pick=solve(ind-1,tar-arr[ind],arr,dp);
+
+    return dp[ind][tar]=pick+notpick;
+}
+int targetSum(int n, int target, vector<int>& arr) {
+    // Write your code here.
+
+
+    int sum=0;
+
+    for(int i=0;i<n;i++)
+    {
+        sum+=arr[i];
+    }
+
+    if(sum-target<0 || (sum-target)%2!=0 ) return 0;
+
+    int newtarget=(sum-target)/2;
+    vector<vector<int>> dp(n,vector<int>(newtarget+1,-1));
+
+    return solve(n-1,newtarget,arr,dp);
+}
