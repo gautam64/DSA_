@@ -1,0 +1,28 @@
+
+#include <bits/stdc++.h>
+long solve(int ind,int tar, int *a, vector<vector<long>> &dp)
+{
+
+    if(ind==0)
+    {
+        if(tar%a[ind]==0 ) return 1;
+        return 0;
+    }
+
+    if(dp[ind][tar]!=-1) return dp[ind][tar];
+
+    int notpick = solve(ind-1,tar,a,dp);
+    int pick=0;
+    if(tar>=a[ind]) pick=solve(ind,tar-a[ind],a,dp);
+
+    return dp[ind][tar]=pick+notpick;
+}
+
+long countWaysToMakeChange(int *denominations, int n, int value)
+{
+    //Write your code here
+
+    vector<vector<long>> dp(n,vector<long>(value+1,-1));
+
+    return solve(n-1,value,denominations,dp);
+}
