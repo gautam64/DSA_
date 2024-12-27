@@ -1,0 +1,29 @@
+int solve(int ind,int len,vector<int> &price,vector<vector<int>> &dp)
+{
+
+	if(ind==0)
+	{
+		return (len*price[0]);
+	}
+
+	if(dp[ind][len]!=-1) return dp[ind][len];
+
+	int notcut=solve(ind-1,len,price,dp);
+
+	int cut=0;
+	if(ind+1<=len) cut=price[ind]+solve(ind,len-ind-1,price,dp);
+
+	return dp[ind][len]=max(cut,notcut);
+
+
+}
+
+int cutRod(vector<int> &price, int n)
+{
+	// Write your code here.
+
+	vector<vector<int>> dp(n,vector<int>(n+1,-1));
+
+	return solve(n-1,n,price,dp);
+	
+}
