@@ -1,0 +1,32 @@
+#include<bits/stdc++.h>
+
+long solve(int i,long *values, int n,int status,vector<vector<long>> &dp)
+{
+
+    if(i==n)
+    {
+        return 0;
+        
+    }
+
+    if(dp[i][status]!=-1) return dp[i][status];
+    //1=buy 0=sell
+
+    long profit=0;
+
+    if(status==1) profit=max(-values[i]+solve(i+1,values,n,0,dp),solve(i+1,values,n,1,dp));
+    else profit=max(values[i]+solve(i+1,values,n,1,dp),solve(i+1,values,n,0,dp));
+
+    return dp[i][status]=profit;
+}
+
+long getMaximumProfit(long *values, int n)
+{
+    //Write your code here
+
+    if(n==0) return 0;
+
+    vector<vector<long>> dp(n,vector<long>(2,-1));
+
+    return solve(0,values,n,1,dp);
+}
