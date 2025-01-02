@@ -16,3 +16,6 @@ vector<int> dp(n,1);
     }
 
     return ans;
+
+
+// for printing we will use a another array to backtrack the previous index
