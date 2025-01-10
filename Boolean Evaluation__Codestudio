@@ -1,0 +1,50 @@
+#include <bits/stdc++.h> 
+int m=1000000007;
+long long f(int i,int j,int istrue,string & exp, vector<vector<vector<long>>> &dp)
+{
+    if(i>j) return 0;
+
+    if(i==j)
+    {
+        if(istrue) return exp[i]=='T';
+        else return exp[i]=='F';
+    }
+    long long ways=0;
+    
+    if(dp[i][j][istrue]!=-1) return dp[i][j][istrue];
+
+    for(int index=i+1;index<=j-1;index=index+2)
+    {
+        long long lT=f(i,index-1,1,exp,dp);
+        long long lF=f(i,index-1,0,exp,dp);
+        long long rT=f(index+1,j,1,exp,dp);
+        long long rF=f(index+1,j,0,exp,dp);
+
+        if(exp[index]=='&'){
+
+            if(istrue) ways=(ways+(lT*rT)%m)%m;
+            else ways=(ways+(lT*rF)%m+(lF*rT)%m+(lF*rF)%m)%m;
+        }
+        else if(exp[index]=='|')
+        {
+            if(istrue) ways=(ways+(lT*rT)%m+(lT*rF)%m+(rT*lF)%m)%m;
+            else ways=(ways+(lF*rF)%m)%m;
+        }
+        else
+        {
+            if(istrue) ways=(ways+(lT*rF)%m+(rT*lF)%m)%m;
+            else ways=(ways+(lF*rF)%m+(lT*rT)%m)%m;
+        }
+
+    
+    }
+
+    return dp[i][j][istrue]=ways;
+
+}
+int evaluateExp(string & exp) {
+    // Write your code here.
+    int n=exp.size();
+    vector<vector<vector<long>>> dp(n,vector<vector<long>>(n,vector<long>(2,-1)));
+    return f(0,exp.size()-1,1,exp,dp);
+}
