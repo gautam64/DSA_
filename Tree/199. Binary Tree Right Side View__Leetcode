@@ -1,0 +1,41 @@
+class Solution {
+private:
+    void recursion(TreeNode* root,int level,vector<int >&ans)
+    {
+        if(root==NULL) return;
+        if(ans.size()==level) ans.push_back(root->val);
+
+        recursion(root->right,level+1,ans);
+        recursion(root->left,level+1,ans);
+    }
+public:
+    vector<int> rightSideView(TreeNode* root) {
+
+    vector<int >ans;
+                      //recursion(root,0,ans);
+                      //return ans;     optimized approach recursion;
+    map<int,int> m;
+    queue<pair<TreeNode*,int>> q;
+    if(!root) return ans;
+    q.push({root,0});
+    while(!q.empty())
+    {
+        auto it=q.front();
+        q.pop();
+        TreeNode* node=it.first;
+        int line=it.second;
+        if(m.find(line)==m.end()) m[line]=node->val;
+
+        if(node->right!=NULL) q.push({node->right,line+1});
+        if(node->left!=NULL) q.push({node->left,line+1});
+        
+    }
+    for(auto it:m)
+    {
+        ans.push_back(it.second);
+    }
+
+    return ans;
+        
+    }
+};
