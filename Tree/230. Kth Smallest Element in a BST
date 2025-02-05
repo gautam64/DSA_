@@ -1,0 +1,57 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    int kthSmallest(TreeNode* root, int k) {
+
+        
+        stack <TreeNode*> st;
+        TreeNode* node=root;
+
+        int count=0;
+        
+        vector<int> temp;
+
+        while(true)
+        {
+            if(node!=NULL)
+            {
+                st.push(node);
+                node=node->left;
+
+            }
+            else
+            {
+                if(st.empty()) break;
+
+                node=st.top();
+                st.pop();
+                temp.push_back(node->val);
+                count++;
+                if(count==k) return node->val;
+                node=node->right;
+            }
+            
+            
+
+        }
+
+
+        return temp[k-1];
+
+
+        //NOTE--->>>> eficient approach
+        //since inorder is sorted in bst we can create a variable counter and increase it whenever we insert a node;
+        //The moment it equals to k that is the answer.
+        
+    }
+};
