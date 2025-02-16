@@ -1,0 +1,37 @@
+#include<math.h>
+class Solution {
+private:
+    bool check(int square,int i,int zero)
+    {
+
+        if(zero>to_string(square).length()) return false;
+        if(i<0) return false;
+        if(i==0 && square==0) return true;
+        if(square==0 && i>0) return false;
+
+
+        
+        int notpart=check(square,i,zero+1);
+        i=i-(square % int(pow(10,zero)));
+        int part=check(square/pow(10,zero),i,1);
+
+        return part||notpart;
+    }
+public:
+    int punishmentNumber(int n) {
+
+
+        int ans=0;
+        for(int i=1;i<=n;i++)
+        {
+            int square=i*i;
+
+            if(check(square,i,1)) ans=ans+square;
+        }
+
+        return ans;
+        
+    }
+
+
+};
