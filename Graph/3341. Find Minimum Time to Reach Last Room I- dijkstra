@@ -1,0 +1,60 @@
+class Solution {
+public:
+    int minTimeToReach(vector<vector<int>>& moveTime) {
+
+        typedef pair<int,pair<int,int>> p;
+
+        int m=moveTime.size();
+        int n=moveTime[0].size();
+
+        vector<vector<int>> ans(m,vector<int>(n,INT_MAX));
+
+        priority_queue<p,vector<p>,greater<p>> pq;
+        ans[0][0]=0;
+        pq.push({0,{0,0}});
+
+        int answer=-1;
+
+        while(!pq.empty())
+        {
+            int curtime=pq.top().first;
+            auto cel=pq.top().second;
+            int i=cel.first;
+            int j=cel.second;
+
+            pq.pop();
+
+            if(i==m-1 && j==n-1)
+            {
+                answer=max(answer,curtime);
+            } 
+
+            int delx[]={-1,0,1,0};
+            int dely[]={0,1,0,-1};
+            for(int k=0;k<4;k++)
+            {
+                int newi=i+delx[k];
+                int newj=j+dely[k];
+
+                if(newi>=0 && newj>=0 && newi<m && newj<n)
+                {
+                    int wait=max(moveTime[newi][newj]-curtime,0);
+
+                    int arritime=curtime+1+wait;
+
+                    if(ans[newi][newj]>arritime)
+                    {
+                        ans[newi][newj]=arritime;
+                        pq.push({arritime,{newi,newj}});
+                    }
+                    
+                }
+            }
+        
+        }
+
+        
+        return answer;
+        
+    }
+};
