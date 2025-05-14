@@ -1,0 +1,53 @@
+class Solution {
+public:
+    int mod=1e9+7;
+    int lengthAfterTransformations(string s, int t) {
+
+        string temp=s;
+        
+        vector<int> m(26,0);
+
+        int n=s.length();
+        
+
+        for(int i=0;i<n;i++) 
+        {
+            m[s[i]-'a']++;
+        }
+
+        for(int i=0;i<t;i++)
+        {
+            
+            vector<int> mnew(26,0);
+
+            for(int j=0;j<26;j++)
+            {
+                char ch='a'+j;
+                int freq=m[j];
+
+                if(ch!='z') mnew[ch+1-'a']=(mnew[ch+1-'a']+freq)%mod;
+                else
+                {
+                    mnew['a'-'a']=(mnew['a'-'a']+freq)%mod;
+                    mnew['b'-'a']=(mnew['b'-'a']+freq)%mod;
+                }
+
+                
+            }
+
+            m=mnew;
+            
+        }
+
+
+        int result=0;
+
+        for(int i=0;i<26;i++)
+        {
+            result=(result+m[i])%mod;
+        }
+
+        return result;
+        
+    }
+};
