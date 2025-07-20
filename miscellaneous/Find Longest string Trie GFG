@@ -1,0 +1,117 @@
+class Solution {
+    
+         struct Node{
+        
+        bool flag;
+        Node* links[26];
+        
+        Node() 
+        {
+            flag = false;
+            for (int i = 0; i < 26; ++i) links[i] = NULL;
+        }
+
+        bool containskey(char ch){
+            return (links[ch-'a']!=NULL);
+        };
+
+        void put(char ch,Node* node){
+            links[ch-'a']=node;
+        };
+
+        void setend(){
+            flag=true;
+        };
+        
+        bool isend(){
+            return flag;
+        };
+        Node* get(char ch){
+            return links[ch-'a'];
+        };
+    };
+    
+class Trie{
+    
+    Node* root;
+    
+    public: 
+    
+    Trie(){
+            root=new Node();
+        }
+        
+    void insert(string word){
+        
+        Node* node=root;
+        
+        for(int i=0;i<word.size();i++)
+        {
+            if(!node->containskey(word[i]))
+            {
+                node->put(word[i],new Node);
+                
+            }
+            node=node->get(word[i]);
+        }
+        
+        node->setend();
+    }
+    
+    bool checkprefix(string word)
+    {
+        bool f1=true;
+        Node* node=root;
+        
+        for(int i=0;i<word.length();i++)
+        {
+            if(node->containskey(word[i]))
+            {
+                node=node->get(word[i]);
+                if(node->isend()==false) return false;
+            }
+            
+            else return false;
+        }
+        
+        
+        return true;
+    }
+};
+    
+  public:
+        
+        
+    string longestString(vector<string> &words) {
+        // code here
+        
+        Trie trie;
+        
+        for(auto &it:words)
+        {
+            trie.insert(it);
+        }
+        
+        string ans="";
+        
+        for(auto it:words)
+        {
+            if(trie.checkprefix(it))
+            {
+                if(it.length()>ans.length())
+                {
+                    ans=it;
+                }
+                else if(it.length()==ans.length() && it<ans)
+                {
+                    ans=it;
+                }
+            }
+            
+        }
+        
+        return ans;
+        
+    
+    }
+};
